@@ -1,23 +1,36 @@
 <!doctype html>
-<html {!! get_language_attributes() !!}>
-  @include('partials.head')
-  <body @php body_class() @endphp>
-    @php do_action('get_header') @endphp
-    @include('partials.header')
-    <div class="wrap container" role="document">
-      <div class="content">
-        <main class="main">
-          @yield('content')
-        </main>
-        @if (App\display_sidebar())
-          <aside class="sidebar">
-            @include('partials.sidebar')
-          </aside>
-        @endif
-      </div>
+<html @php(language_attributes())>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    @php(do_action('get_header'))
+    @php(wp_head())
+  </head>
+
+  <body @php(body_class())>
+    @php(wp_body_open())
+
+    <div id="app">
+      <a class="sr-only focus:not-sr-only" href="#main">
+        {{ __('Skip to content', 'sage') }}
+      </a>
+
+      @include('sections.header')
+
+      <main id="main" class="main">
+        @yield('content')
+      </main>
+
+      @hasSection('sidebar')
+        <aside class="sidebar">
+          @yield('sidebar')
+        </aside>
+      @endif
+
+      @include('sections.footer')
     </div>
-    @php do_action('get_footer') @endphp
-    @include('partials.footer')
-    @php wp_footer() @endphp
+
+    @php(do_action('get_footer'))
+    @php(wp_footer())
   </body>
 </html>
